@@ -1,16 +1,9 @@
 import { useEffect, useState } from "react";
-import months from "../constants/months";
+
 import Hero from "../components/Hero";
 
-interface APIData {
-    date: string,
-    explanation: string,
-    hdurl: string,
-    media_type: string,
-    service_version: string,
-    title: string
-    url: string
-}
+import months from "../constants/months";
+import APIData from "../types/APIData";
 
 const Home = () => {
     const API_KEY = import.meta.env.VITE_API_KEY;
