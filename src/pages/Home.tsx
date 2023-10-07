@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import months from "../constants/months";
+import Hero from "../components/Hero";
 
 interface APIData {
     date: string,
@@ -15,8 +16,8 @@ const Home = () => {
     const API_KEY = import.meta.env.VITE_API_KEY;
 
     const [apiData, setAPIData] = useState<APIData | null>(null);
-    const [error, setError] = useState<string>('');
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+    // const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const changeDate = (data: APIData) => {
         const [year, month, date] = data.date.split('-');
@@ -28,8 +29,6 @@ const Home = () => {
 
     useEffect(() => {
         const fetchAPOD = async () => {
-            setIsLoading(true);
-
             if (localStorage.getItem('apiData') !== null) {
                 const storedAPIData = localStorage.getItem('apiData');
                 storedAPIData !== null ? setAPIData(JSON.parse(storedAPIData)) : setAPIData(null)
@@ -39,16 +38,14 @@ const Home = () => {
 
                 if (res.ok) {
                     changeDate(data);
-                    localStorage.setItem('apiData', JSON.stringify(data));
-                    setIsLoading(false);
 
+                    setError(null);
                     setAPIData(data);
+
+                    localStorage.setItem('apiData', JSON.stringify(data));
                 }
 
-                if (!res.ok) {
-                    setIsLoading(false);
-                    setError('Some error occured');
-                }
+                if (!res.ok) setError('Some error occured');
             }
         }
 
@@ -56,18 +53,15 @@ const Home = () => {
     }, [API_KEY])
 
     return (
-        <div>
-            <p className='text-red-500'>Testing</p>
-            {isLoading && <p>Is loading...</p>}
-            {error && <p>{error}</p>}
+        <div className='h-screen flex justify-center items-center'>
+            {error && <p className='text-sm text-[#C0C0C0]'>Some error occured :(</p>}
 
             {apiData && (
-                <div>
-                    <p>{apiData.title}</p>
-                    <p>{apiData.date}</p>
-                    <p>{apiData.explanation}</p>
-                    <img src={apiData.hdurl} />
-                </div>
+                <Hero
+                    image={apiData.hdurl}
+                    title={apiData.title}
+                    date={apiData.date}
+                />
             )}
         </div>
     )
