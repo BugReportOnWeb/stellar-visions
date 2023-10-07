@@ -4,6 +4,8 @@ import APIData from '../types/APIData';
 import months from '../constants/months';
 import Details from '../components/Details';
 
+import { motion } from 'framer-motion';
+
 const Info = () => {
     const API_KEY = import.meta.env.VITE_API_KEY;
 
@@ -44,7 +46,12 @@ const Info = () => {
     }, [API_KEY])
 
     return (
-        <div className='h-screen flex justify-center items-center'>
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.75, ease: 'easeOut' }}
+            className='h-screen flex justify-center items-center'
+        >
             {error && <p className='text-sm text-[#C0C0C0]'>Some error occured :(</p>}
 
             {apiData && (
@@ -55,7 +62,7 @@ const Info = () => {
                     explanation={apiData.explanation}
                 />
             )}
-        </div>
+        </motion.div>
     )
 }
 
