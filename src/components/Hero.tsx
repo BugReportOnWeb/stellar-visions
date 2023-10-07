@@ -11,11 +11,9 @@ const Hero: React.FC<Props> = ({ image, title, date }) => {
         <div className='flex flex-col w-1/2 gap-7'>
             <h1 className='text-[#C0C0C0] text-lg text-center'>Astronomy Picture of the Day</h1>
 
-            <Link to='/detail'>
+            <Link to='/info'>
                 <img
-                    className='shadow-xl h-[30rem] w-full rounded-lg cursor-pointer transition-transform duration-500 hover:scale-150'
-                    src={image}
-                />
+                    className='shadow-xl h-[30rem] w-full rounded-lg cursor-pointer transition-transform ease-in-out duration-500 hover:scale-150' src={image} />
             </Link>
 
             <div className='mx-3 text-[#B0B0B0] flex justify-between'>
