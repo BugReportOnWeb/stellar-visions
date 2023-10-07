@@ -1,27 +1,45 @@
-# React + TypeScript + Vite
+# StellarVisions
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+StellarVisions (part of the project for my Front End Engineering (FEE) course) is a webapp that allows you to explore the beauty of the cosmos through NASA's Astronomy Picture of the Day (APoD).
 
-Currently, two official plugins are available:
+## Getting Started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+These instructions will help you set up a local development copy of Stellar Visions for testing and development purposes.
 
-## Expanding the ESLint configuration
+### Prerequisites
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+To run StellarVisions locally, you need to have the following installed:
 
-- Configure the top-level `parserOptions` property like this:
+- Node.js
+- npm (Node Package Manager)
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+### Installation
+
+1. Clone the repository to your local machine:
+
+```bash
+git clone https://github.com/BugReportOnWeb/stellar-visions.git
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+2. Navigate to the project directory:
+```bash
+cd stellar-visions
+```
+
+3. Install the project dependencies:
+```bash
+npm install
+```
+
+4. Create a `.env` file and add you [NASA API key](https://api.nasa.gov) in it:
+```
+VITE_API_KEY=<YOUR-API-KEY>
+```
+
+4. Start the development server:
+```bash
+npm run dev
+```
+
+Open your browser and visit http://localhost:5173 to view StellarVisions locally.
+
