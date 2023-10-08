@@ -4,7 +4,7 @@ StellarVisions (part of the project for my Front End Engineering (FEE) course) i
 
 ## Getting Started
 
-These instructions will help you set up a local development copy of Stellar Visions for testing and development purposes.
+These instructions will help you set up a local development copy of StellarVisions for testing and development purposes.
 
 ### Prerequisites
 
