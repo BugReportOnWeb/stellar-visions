@@ -50,7 +50,7 @@ const Info = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.75, ease: 'easeOut' }}
-            className='h-screen flex justify-center items-center'
+            className='sm:h-screen sm:flex sm:justify-center sm:items-center'
         >
             {error && <p className='text-sm text-[#C0C0C0]'>Some error occured :(</p>}
 
