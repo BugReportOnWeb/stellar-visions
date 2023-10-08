@@ -19,7 +19,7 @@ const Details: React.FC<Props> = ({ title, image, date, explanation }) => {
 
                 <img
                     src={image}
-                    className='shadow-xl h-[20rem] w-full rounded-lg sm:h-[23rem]'
+                    className='shadow-xl h-[17rem] w-full rounded-lg sm:h-[23rem]'
                 />
 
                 <div className='ml-2'>

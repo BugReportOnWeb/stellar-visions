@@ -13,7 +13,7 @@ const Hero: React.FC<Props> = ({ image, title, date }) => {
 
             <Link to='/info'>
                 <img
-                    className='shadow-xl h-[20rem] w-full rounded-lg cursor-pointer transition-transform ease-in-out duration-500 hover:scale-150 sm:h-[30rem]' src={image} />
+                    className='shadow-xl h-[17rem] w-full rounded-lg cursor-pointer transition-transform ease-in-out duration-500 hover:scale-100 sm:h-[30rem] sm:hover:scale-150' src={image} />
             </Link>
 
             <div className='mx-3 text-[#B0B0B0] flex flex-col items-center justify-between sm:flex-row'>
