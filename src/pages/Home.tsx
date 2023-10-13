@@ -1,11 +1,13 @@
+// Libraries/packages
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
-import Hero from "../components/Hero";
-
+// Local data
 import months from "../constants/months";
 import APIData from "../types/APIData";
 
-import { motion } from "framer-motion";
+// Components
+import Hero from "../components/Hero";
 
 const Home = () => {
     const API_KEY = import.meta.env.VITE_API_KEY;
@@ -15,12 +17,16 @@ const Home = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
+        let controller: AbortController | null = new AbortController;
+        const signal = controller.signal;
+
         const fetchAPOD = async () => {
-            if (localStorage.getItem('apiData') !== null) {
+            if (localStorage.getItem('apiData')) {
                 const storedAPIData = localStorage.getItem('apiData');
                 storedAPIData !== null ? setAPIData(JSON.parse(storedAPIData)) : setAPIData(null)
             } else {
-                const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`);
+
+                const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`, { signal: signal });
                 const data: APIData = await res.json();
 
                 if (res.ok) {
@@ -33,10 +39,16 @@ const Home = () => {
                 }
 
                 if (!res.ok) setError('Some error occured');
+
+                controller = null;
             }
         }
 
         fetchAPOD();
+
+        return () => {
+            if (controller) controller.abort;
+        }
     }, [API_KEY])
 
     const changeDate = (data: APIData) => {
@@ -48,29 +60,30 @@ const Home = () => {
     }
 
     const fetchSpecifiedAPOD = async (specifiedDate: string) => {
-        setIsLoading(true)
+        setIsLoading(true);
+
         const formatedDate = specifiedDate.split(" ")
-                                .reverse()
-                                .join('-')
+            .reverse()
+            .join('-')
 
         const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&date=${formatedDate}`);
         const data = await res.json();
 
         if (res.ok) {
-            changeDate(data)
-            setAPIData(data)
+            changeDate(data);
+            setAPIData(data);
 
             localStorage.setItem('apiData', JSON.stringify(data));
         }
 
         if (!res.ok) setError(`Some error occured finding APOD for '${specifiedDate}'`);
 
-        setIsLoading(false)
+        setIsLoading(false);
     }
 
 
     return (
-        <motion.div 
+        <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.75, ease: 'easeOut' }}
