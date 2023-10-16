@@ -21,7 +21,7 @@ const Info = () => {
     }
 
     useEffect(() => {
-        const fetchAPOD = async () => {
+        (async () => {
             if (localStorage.getItem('apiData') !== null) {
                 const storedAPIData = localStorage.getItem('apiData');
                 storedAPIData !== null ? setAPIData(JSON.parse(storedAPIData)) : setAPIData(null)
@@ -40,9 +40,7 @@ const Info = () => {
 
                 if (!res.ok) setError('Some error occured');
             }
-        }
-
-        fetchAPOD();
+        }) ();
     }, [API_KEY])
 
     return (

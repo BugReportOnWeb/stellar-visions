@@ -20,7 +20,7 @@ const Home = () => {
         let controller: AbortController | null = new AbortController;
         const signal = controller.signal;
 
-        const fetchAPOD = async () => {
+        (async () => {
             if (localStorage.getItem('apiData')) {
                 const storedAPIData = localStorage.getItem('apiData');
                 storedAPIData !== null ? setAPIData(JSON.parse(storedAPIData)) : setAPIData(null)
@@ -42,9 +42,7 @@ const Home = () => {
 
                 controller = null;
             }
-        }
-
-        fetchAPOD();
+        }) ();
 
         return () => {
             if (controller) controller.abort;
