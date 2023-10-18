@@ -1,47 +1,15 @@
-import { useState, useEffect } from 'react';
-
-import APIData from '../types/APIData';
-import months from '../constants/months';
-import Details from '../components/Details';
-
+// Libraries/Modules
+import { useContext } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+
+// Local data
+import { APIDataContextType } from '../types/API';
+import Details from '../components/Details';
+import { APIDataContext } from '../context/APIDataContext';
 
 const Info = () => {
-    const API_KEY = import.meta.env.VITE_API_KEY;
-
-    const [apiData, setAPIData] = useState<APIData | null>(null);
-    const [error, setError] = useState<string | null>(null);
-
-    const changeDate = (data: APIData) => {
-        const [year, month, date] = data.date.split('-');
-        const newMonth = months[parseInt(month) - 1];
-
-        const newDate = `${date} ${newMonth} ${year}`;
-        if (data != null) data.date = newDate;
-    }
-
-    useEffect(() => {
-        (async () => {
-            if (localStorage.getItem('apiData') !== null) {
-                const storedAPIData = localStorage.getItem('apiData');
-                storedAPIData !== null ? setAPIData(JSON.parse(storedAPIData)) : setAPIData(null)
-            } else {
-                const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`);
-                const data: APIData = await res.json();
-
-                if (res.ok) {
-                    changeDate(data);
-
-                    setError(null);
-                    setAPIData(data);
-
-                    localStorage.setItem('apiData', JSON.stringify(data));
-                }
-
-                if (!res.ok) setError('Some error occured');
-            }
-        }) ();
-    }, [API_KEY])
+    const { apiData } = useContext(APIDataContext) as APIDataContextType;
 
     return (
         <motion.div
@@ -50,7 +18,12 @@ const Info = () => {
             transition={{ duration: 0.75, ease: 'easeOut' }}
             className='sm:h-screen sm:flex sm:justify-center sm:items-center'
         >
-            {error && <p className='text-sm text-[#C0C0C0]'>Some error occured :(</p>}
+            {!apiData && (
+                <div className='w-fit mx-auto mt-16 text-base text-[#C0C0C0] text-center'>
+                    <p>Some error occured :(</p>
+                    <p>Go back to <Link className='underline underline-offset-4 hover:decoration-white' to='/'>Home</Link> page</p>
+                </div>
+            )}
 
             {apiData && (
                 <Details
