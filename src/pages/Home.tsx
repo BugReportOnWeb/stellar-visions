@@ -1,18 +1,20 @@
 // Libraries/packages
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-
-// Local data
-import months from "../constants/months";
-import APIData from "../types/APIData";
 
 // Components
 import Hero from "../components/Hero";
 
+// Local data
+import months from "../constants/months";
+import { APIData, APIDataContextType } from "../types/API";
+import { APIDataContext } from '../context/APIDataContext';
+
 const Home = () => {
     const API_KEY = import.meta.env.VITE_API_KEY;
 
-    const [apiData, setAPIData] = useState<APIData | null>(null);
+    const { apiData, setAPIData } = useContext(APIDataContext) as APIDataContextType;
+
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -20,34 +22,38 @@ const Home = () => {
         let controller: AbortController | null = new AbortController;
         const signal = controller.signal;
 
+        // Check with global context value instead of localStorage
         (async () => {
             if (localStorage.getItem('apiData')) {
                 const storedAPIData = localStorage.getItem('apiData');
                 storedAPIData !== null ? setAPIData(JSON.parse(storedAPIData)) : setAPIData(null)
             } else {
+                try {
+                    const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`, { signal: signal });
+                    const data: APIData = await res.json();
 
-                const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`, { signal: signal });
-                const data: APIData = await res.json();
+                    if (res.ok) {
+                        changeDate(data);
 
-                if (res.ok) {
-                    changeDate(data);
+                        setError(null);
+                        setAPIData(data);
 
-                    setError(null);
-                    setAPIData(data);
+                        localStorage.setItem('apiData', JSON.stringify(data));
+                    }
 
-                    localStorage.setItem('apiData', JSON.stringify(data));
+                    if (!res.ok) setError('Some error occured');
+                } catch (error) {
+                    console.log(error);
+                } finally {
+                    controller = null;
                 }
-
-                if (!res.ok) setError('Some error occured');
-
-                controller = null;
             }
-        }) ();
+        })();
 
         return () => {
-            if (controller) controller.abort;
+            if (controller) controller.abort();
         }
-    }, [API_KEY])
+    }, [API_KEY, setAPIData])
 
     const changeDate = (data: APIData) => {
         const [year, month, date] = data.date.split('-');
