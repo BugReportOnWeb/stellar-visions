@@ -80,7 +80,7 @@ const Home = () => {
             localStorage.setItem('apiData', JSON.stringify(data));
         }
 
-        if (!res.ok) setError(`Some error occured finding APOD for '${specifiedDate}'`);
+        if (!res.ok) setError(`Some error occured finding APOD for "${specifiedDate}"`);
 
         setIsLoading(false);
     }

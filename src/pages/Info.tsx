@@ -11,6 +11,8 @@ import { APIDataContext } from '../context/APIDataContext';
 const Info = () => {
     const { apiData } = useContext(APIDataContext) as APIDataContextType;
 
+    // Check on refresh page (using localStorage?)
+
     return (
         <motion.div
             initial={{ opacity: 0 }}

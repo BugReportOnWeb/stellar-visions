@@ -9,7 +9,7 @@ interface Props {
     fetchSpecifiedAPOD: (specifiedDate: string) => void;
 }
 
-const Hero: React.FC<Props> = ({ image, title, date, isLoading, fetchSpecifiedAPOD}) => {
+const Hero: React.FC<Props> = ({ image, title, date, isLoading, fetchSpecifiedAPOD }) => {
     const [specifiedDate, setSpecifiedDate] = useState<string>('');
 
     const handleDateSubmit = (e: SyntheticEvent<Element>) => {
