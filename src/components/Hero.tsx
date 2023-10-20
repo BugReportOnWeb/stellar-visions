@@ -1,4 +1,4 @@
-import { SyntheticEvent, useState } from "react";
+import { FormEvent, useState } from "react";
 import { Link } from "react-router-dom"
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 const Hero: React.FC<Props> = ({ image, title, date, isLoading, fetchSpecifiedAPOD }) => {
     const [specifiedDate, setSpecifiedDate] = useState<string>('');
 
-    const handleDateSubmit = (e: SyntheticEvent<Element>) => {
+    const handleDateSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         fetchSpecifiedAPOD(specifiedDate);
