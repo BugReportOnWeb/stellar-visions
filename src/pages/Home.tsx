@@ -25,8 +25,8 @@ const Home = () => {
         // Check with global context value instead of localStorage
         (async () => {
             if (localStorage.getItem('apiData')) {
-                const storedAPIData = localStorage.getItem('apiData');
-                storedAPIData !== null ? setAPIData(JSON.parse(storedAPIData)) : setAPIData(null)
+                const storedAPIData = localStorage.getItem('apiData')!;
+                setAPIData(JSON.parse(storedAPIData));
             } else {
                 try {
                     const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`, { signal: signal });
