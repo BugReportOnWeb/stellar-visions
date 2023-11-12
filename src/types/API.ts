@@ -1,13 +1,14 @@
 import { Dispatch, SetStateAction } from "react";
 
 interface APIData {
-    date: string,
-    explanation: string,
-    hdurl: string,
-    media_type: string,
-    service_version: string,
-    title: string
-    url: string
+    date: string;
+    explanation: string;
+    hdurl: string;
+    media_type: string;
+    service_version: string;
+    title: string;
+    url: string;
+    searched: boolean;
 }
 
 interface APIDataContextType {
