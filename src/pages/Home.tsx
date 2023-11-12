@@ -23,22 +23,38 @@ const Home = () => {
         const signal = controller.signal;
 
         // Check with global context value instead of localStorage
-        (async () => {
+        const fetchAPIData = async () => {
             if (localStorage.getItem('apiData')) {
-                const storedAPIData = localStorage.getItem('apiData')!;
-                setAPIData(JSON.parse(storedAPIData));
+                const currFullDate = new Date();
+
+                const { currDate, currMonth, currYear } = {
+                    currDate: currFullDate.getDate(),
+                    currMonth: months[currFullDate.getMonth()],
+                    currYear: currFullDate.getFullYear()
+                }
+
+                const currFormatedDate = `${currDate} ${currMonth} ${currYear}`;
+                const storedAPIData: APIData = JSON.parse(localStorage.getItem('apiData')!);
+
+                if (currFormatedDate !== storedAPIData.date && !storedAPIData.searched) {
+                    localStorage.clear();
+                    fetchAPIData();
+                }
+
+                setAPIData(storedAPIData);
             } else {
                 try {
                     const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`, { signal: signal });
-                    const data: APIData = await res.json();
+                    const data = await res.json();
+                    const newData = { ...data, searched: false };
 
                     if (res.ok) {
-                        changeDate(data);
+                        changeDate(newData);
 
                         setError(null);
-                        setAPIData(data);
+                        setAPIData(newData);
 
-                        localStorage.setItem('apiData', JSON.stringify(data));
+                        localStorage.setItem('apiData', JSON.stringify(newData));
                     }
 
                     if (!res.ok) setError('Some error occured');
@@ -48,7 +64,9 @@ const Home = () => {
                     controller = null;
                 }
             }
-        })();
+        };
+
+        fetchAPIData();
 
         return () => {
             if (controller) controller.abort();
@@ -72,12 +90,13 @@ const Home = () => {
 
         const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&date=${formatedDate}`);
         const data = await res.json();
+        const newData = { ...data, searched: true };
 
         if (res.ok) {
-            changeDate(data);
-            setAPIData(data);
+            changeDate(newData);
+            setAPIData(newData);
 
-            localStorage.setItem('apiData', JSON.stringify(data));
+            localStorage.setItem('apiData', JSON.stringify(newData));
         }
 
         if (!res.ok) setError(`Some error occured finding APOD for "${specifiedDate}"`);
