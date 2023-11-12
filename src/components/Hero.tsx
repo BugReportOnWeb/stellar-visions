@@ -10,7 +10,10 @@ interface Props {
 }
 
 const Hero: React.FC<Props> = ({ image, title, date, isLoading, fetchSpecifiedAPOD }) => {
-    const [specifiedDate, setSpecifiedDate] = useState<string>('');
+    const [specifiedDate, setSpecifiedDate] = useState('');
+    // TOOD: Take in use of imagePlaceholder
+    const [imagePlaceholder, setImagePlaceholder] = useState(true);
+    console.log(imagePlaceholder);
 
     const handleDateSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -25,7 +28,10 @@ const Hero: React.FC<Props> = ({ image, title, date, isLoading, fetchSpecifiedAP
 
             <Link to='/info'>
                 <img
-                    className='shadow-xl h-[17rem] w-full rounded-lg cursor-pointer transition-transform ease-in-out duration-500 hover:scale-100 sm:h-[30rem] sm:hover:scale-150' src={image} />
+                    className='shadow-xl h-[17rem] w-full rounded-lg cursor-pointer transition-transform ease-in-out duration-500 hover:scale-100 sm:h-[30rem] sm:hover:scale-150'
+                    src={image}
+                    onLoad={() => setImagePlaceholder(false)}
+                />
             </Link>
 
             <div className='mx-3 text-[#B0B0B0] flex flex-col items-center justify-between gap-1 sm:flex-row'>
