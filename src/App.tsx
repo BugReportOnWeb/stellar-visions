@@ -1,4 +1,4 @@
-// Libraries/Modules
+// Modules/Packages
 import { Routes, Route } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
