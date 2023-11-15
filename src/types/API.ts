@@ -8,7 +8,6 @@ interface APIData {
     service_version: string;
     title: string;
     url: string;
-    searched: boolean;
 }
 
 interface APIDataContextType {
