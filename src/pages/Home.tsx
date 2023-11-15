@@ -84,6 +84,11 @@ const Home = () => {
             transition={{ duration: 0.75, ease: 'easeOut' }}
             className='h-screen flex justify-center items-center'
         >
+            {!apiData && (
+                // TODO: Have a loading component/skeleton
+                <p>Loading...</p>
+            )}
+
             {error && (
                 <div className='leading-8 w-fit mx-5 text-base text-[#C0C0C0] text-center'>
                     <p>{error} :(</p>
