@@ -7,7 +7,7 @@ interface Props {
 
 const APIDataContext = createContext<APIDataContextType | null>(null);
 
-const APIDataContexProvider: React.FC<Props> = ({ children }) => {
+const APIDataContexProvider = ({ children }: Props) => {
     const [apiData, setAPIData] = useState<APIData | null>(null);
 
     return (
