@@ -1,7 +1,7 @@
 import { FormEvent, useState } from "react";
 import { Link } from "react-router-dom"
 
-interface Props {
+interface HeroProps {
     image: string;
     title: string;
     date: string;
@@ -9,7 +9,7 @@ interface Props {
     fetchSpecifiedAPOD: (specifiedDate: string) => void;
 }
 
-const Hero: React.FC<Props> = ({ image, title, date, isLoading, fetchSpecifiedAPOD }) => {
+const Hero = ({ image, title, date, isLoading, fetchSpecifiedAPOD }: HeroProps) => {
     const [specifiedDate, setSpecifiedDate] = useState('');
     // TOOD: Take in use of imagePlaceholder
     const [imagePlaceholder, setImagePlaceholder] = useState(true);
