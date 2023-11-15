@@ -1,4 +1,4 @@
-// Libraries/packages
+// Hooks/Modules/Packages
 import { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
@@ -6,104 +6,76 @@ import { motion } from "framer-motion";
 import Hero from "../components/Hero";
 
 // Local data
-import months from "../constants/months";
-import { APIData, APIDataContextType } from "../types/API";
+import { APIDataContextType } from "../types/API";
 import { APIDataContext } from '../context/APIDataContext';
+import { changeDate } from "../lib/utils";
+
+// API related constants
+const BASE_URL = 'https://api.nasa.gov/planetary/apod'
+const API_KEY = import.meta.env.VITE_API_KEY;
 
 const Home = () => {
-    const API_KEY = import.meta.env.VITE_API_KEY;
-
     const { apiData, setAPIData } = useContext(APIDataContext) as APIDataContextType;
-
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        let controller: AbortController | null = new AbortController;
-        const signal = controller.signal;
+        let controller: AbortController | null = new AbortController();
 
-        // Check with global context value instead of localStorage
         const fetchAPIData = async () => {
-            if (localStorage.getItem('apiData')) {
-                const currFullDate = new Date();
+            try {
+                const res = await fetch(`${BASE_URL}?api_key=${API_KEY}`, { 
+                    signal: controller?.signal
+                });
+                const data = await res.json();
 
-                const { currDate, currMonth, currYear } = {
-                    currDate: currFullDate.getDate(),
-                    currMonth: months[currFullDate.getMonth()],
-                    currYear: currFullDate.getFullYear()
+                if (res.ok) {
+                    changeDate(data);
+                    setAPIData(data);
+                    setError(null);
                 }
 
-                const currFormatedDate = `${currDate} ${currMonth} ${currYear}`;
-                const storedAPIData: APIData = JSON.parse(localStorage.getItem('apiData')!);
-
-                if (currFormatedDate !== storedAPIData.date && !storedAPIData.searched) {
-                    localStorage.clear();
-                    fetchAPIData();
-                }
-
-                setAPIData(storedAPIData);
-            } else {
-                try {
-                    const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`, { signal: signal });
-                    const data = await res.json();
-                    const newData = { ...data, searched: false };
-
-                    if (res.ok) {
-                        changeDate(newData);
-
-                        setError(null);
-                        setAPIData(newData);
-
-                        localStorage.setItem('apiData', JSON.stringify(newData));
-                    }
-
-                    if (!res.ok) setError('Some error occured');
-                } catch (error) {
-                    console.log(error);
-                } finally {
-                    controller = null;
-                }
+                if (!res.ok) {
+                    setError('Some error occured');
+                } 
+            } catch (error) {
+                // TODO: Do something useful with the error
+                console.log(error);
+            } finally {
+                controller = null;
             }
         };
 
-        fetchAPIData();
+        if (!apiData) fetchAPIData();
 
         return () => {
             if (controller) controller.abort();
         }
-    }, [API_KEY, setAPIData])
-
-    const changeDate = (data: APIData) => {
-        const [year, month, date] = data.date.split('-');
-        const newMonth = months[parseInt(month) - 1];
-
-        const newDate = `${date} ${newMonth} ${year}`;
-        if (data != null) data.date = newDate;
-    }
+    }, [setAPIData, apiData])
 
     const fetchSpecifiedAPOD = async (specifiedDate: string) => {
         setIsLoading(true);
 
-        const formatedDate = specifiedDate.split(" ")
+        const searchedDate = specifiedDate.split(" ")
             .reverse()
             .join('-')
 
-        const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&date=${formatedDate}`);
-        const data = await res.json();
-        const newData = { ...data, searched: true };
+        try {
+            const res = await fetch(`${BASE_URL}?api_key=${API_KEY}&date=${searchedDate}`);
+            const data = await res.json();
 
-        if (res.ok) {
-            changeDate(newData);
-            setAPIData(newData);
+            if (res.ok) {
+                changeDate(data);
+                setAPIData(data);
+            }
 
-            localStorage.setItem('apiData', JSON.stringify(newData));
+            if (!res.ok) setError(`Some error occured finding APOD for "${specifiedDate}"`);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsLoading(false);
         }
-
-        if (!res.ok) setError(`Some error occured finding APOD for "${specifiedDate}"`);
-
-        setIsLoading(false);
     }
-
 
     return (
         <motion.div
@@ -112,7 +84,13 @@ const Home = () => {
             transition={{ duration: 0.75, ease: 'easeOut' }}
             className='h-screen flex justify-center items-center'
         >
-            {error && <p className='text-base text-[#C0C0C0] text-center w-40 sm:w-fit'>{error}</p>}
+            {error && (
+                <div className='leading-8 w-fit mx-5 text-base text-[#C0C0C0] text-center'>
+                    <p>{error} :(</p>
+                    <p>Make sure you submit the date in right format (DD MM YYYY)</p>
+                    <p className='mt-5'>Go back to <span onClick={() => setError(null)} className='underline underline-offset-4 cursor-pointer hover:decoration-white'>Home</span> page</p>
+                </div>
+            )}
 
             {!error && apiData && (
                 <Hero
