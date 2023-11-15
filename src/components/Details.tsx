@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 
-interface Props {
+interface DetailsProps {
     title: string,
     image: string,
     date: string,
     explanation: string
 }
 
-const Details: React.FC<Props> = ({ title, image, date, explanation }) => {
+const Details = ({ title, image, date, explanation }: DetailsProps) => {
     return (
         <div className='max-w-7xl flex flex-col my-16 mx-4 gap-14 sm:my-0 sm:mx-auto sm:flex-row sm:justify-between sm:items-center sm:gap-40'>
             <div className='flex flex-col gap-2 sm:gap-6 sm:items-start sm:w-1/2'>
