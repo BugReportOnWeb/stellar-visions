@@ -12,8 +12,7 @@ interface HeroProps {
 const Hero = ({ image, title, date, isLoading, fetchSpecifiedAPOD }: HeroProps) => {
     const [specifiedDate, setSpecifiedDate] = useState('');
     // TOOD: Take in use of imagePlaceholder
-    const [imagePlaceholder, setImagePlaceholder] = useState(true);
-    console.log(imagePlaceholder);
+    // const [imagePlaceholder, setImagePlaceholder] = useState(true);
 
     const handleDateSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -30,7 +29,7 @@ const Hero = ({ image, title, date, isLoading, fetchSpecifiedAPOD }: HeroProps) 
                 <img
                     className='shadow-xl h-[17rem] w-full rounded-lg cursor-pointer transition-transform ease-in-out duration-500 hover:scale-100 sm:h-[30rem] sm:hover:scale-150'
                     src={image}
-                    onLoad={() => setImagePlaceholder(false)}
+                    // onLoad={() => setImagePlaceholder(false)}
                 />
             </Link>
 
