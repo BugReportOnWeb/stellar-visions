@@ -2,6 +2,12 @@
 
 StellarVisions (part of the project for my Front End Engineering (FEE) course) is a webapp that allows you to explore the beauty of the cosmos through NASA's Astronomy Picture of the Day (APoD).
 
+# UI Interface
+<div align="center">
+    <img src="assets/main.png" alt="Home page">
+    <img src="assets/details.png" alt="Details page">
+</div>
+
 ## Getting Started
 
 These instructions will help you set up a local development copy of StellarVisions for testing and development purposes.
